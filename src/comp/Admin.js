@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Card, Form, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { Modal, Button } from 'react-bootstrap';
 import 'leaflet/dist/leaflet.css';
 
 const AlertMap = ({ referenceCoords }) => {
+  const [userPosition, setUserPosition] = useState(null);
   const [alertShown, setAlertShown] = useState(new Set());
   const [showModal, setShowModal] = useState(false);
   const [direccion, setDireccion] = useState('');
@@ -13,6 +15,7 @@ const AlertMap = ({ referenceCoords }) => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
+        setUserPosition([latitude, longitude]);
         checkProximity(latitude, longitude);
       },
       (error) => {
@@ -59,17 +62,22 @@ const AlertMap = ({ referenceCoords }) => {
 
   return (
     <>
+      <MapContainer center={userPosition || [21.88814023813352, -102.2922891518753]} zoom={13}>
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {userPosition && <Marker position={userPosition} />}
+      </MapContainer>
+
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>¡Ya hay un Reporte cerca de tu localizacion:</Modal.Title>
+          <Modal.Title>¡Estás cerca de una coordenada de referencia!</Modal.Title>
         </Modal.Header>
         <Modal.Body>Dirección: {direccion}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Crear nuevo reporte
+            Cerrar
           </Button>
-          <Button variant="primary" href='/Detalles'>
-            Complementar Reporte
+          <Button variant="primary" href='/Description.js'>
+            Continuar
           </Button>
         </Modal.Footer>
       </Modal>
@@ -90,33 +98,38 @@ const MapView = () => {
 
   return (
     <div>
-      <h1>Reporte</h1>
-      <Card>
-        <Card.Body>
-            <Card.Title>Tipo de Reporte</Card.Title>
-            <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
-                <ToggleButton id="tbg-radio-1" value={1}>
-                Violacion
-                </ToggleButton>
-                <ToggleButton id="tbg-radio-2" value={2}>
-                Robo
-                </ToggleButton>
-                <ToggleButton id="tbg-radio-3" value={3}>
-                Pelea
-                </ToggleButton>
-            </ToggleButtonGroup>
-            <Form>
-                    <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-                    <Form.Label>Descripcion</Form.Label>
-                    <Form.Control as="textarea" rows={3} />
-                    </Form.Group>
-                    <Button href="/">Reportar</Button>
-            </Form>
-        </Card.Body>
-      </Card>
+      <h1>Mapa con Alertas</h1>
       <AlertMap referenceCoords={referenceCoords} />
     </div>
   );
 };
 
 export default MapView;
+
+
+/* import React from "react";
+import { MapContainer, TileLayer, useMap, Circle } from 'react-leaflet'
+import 'leaflet/dist/leaflet.css'
+
+function MapView() {
+   
+    const center = [21.88814023813352, -102.2922891518753]
+    const fillBlueOptions = { fillColor: 'blue' }
+    return (
+        
+        <>
+        <MapContainer center={[21.88814023813352, -102.2922891518753]} zoom={13} scrollWheelZoom={false}>
+                <TileLayer
+            attribution='<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                 <Circle center={center} pathOptions={fillBlueOptions} radius={200} />
+        </MapContainer>
+        </>
+        
+        
+    );
+
+  }
+  
+  export default MapView; */

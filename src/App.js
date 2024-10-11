@@ -1,11 +1,15 @@
 import React from "react";
 import './App.css';
-import MapView from './comp/Map.js'
+import { Button, Card } from "react-bootstrap";
 
 function App() {
   return (
       <>
-        <MapView></MapView>
+        <Card>
+          <Card.Body>
+           <Button href="/Reporte">Reportar</Button>
+          </Card.Body>
+        </Card>
       </>
   );
 }
