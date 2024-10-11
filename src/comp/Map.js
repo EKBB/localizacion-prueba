@@ -3,7 +3,6 @@ import { Modal, Button, Card, Form, ToggleButton, ToggleButtonGroup } from 'reac
 import 'leaflet/dist/leaflet.css';
 
 const AlertMap = ({ referenceCoords }) => {
-  const [alertShown, setAlertShown] = useState(new Set());
   const [showModal, setShowModal] = useState(false);
   const [direccion, setDireccion] = useState('');
 
@@ -30,10 +29,8 @@ const AlertMap = ({ referenceCoords }) => {
         Math.pow(latitude - refLat, 2) + Math.pow(longitude - refLng, 2)
       );
       const key = `${refLat},${refLng}`;
-      if (distance <= threshold && !alertShown.has(key)) {
+      if (distance <= threshold) {
         obtenerDireccion(refLat, refLng); // Obtiene la dirección de la coordenada cercana
-        alertShown.add(key);
-        setAlertShown(new Set(alertShown));
       }
     }
   };
@@ -79,6 +76,7 @@ const AlertMap = ({ referenceCoords }) => {
 
 const MapView = () => {
   const referenceCoords = [
+    [21.8436, -102.2602],
     [21.8915, -102.2505],
     [21.9592, -102.2664],
     [21.9591, -102.2664],

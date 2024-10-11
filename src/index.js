@@ -10,6 +10,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import Description from './comp/Description';
+import AdminView from './comp/Admin';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: "/Detalles",
     element: <Description/>,
+  },
+  {
+    path: "/Admin",
+    element: <AdminView/>,
   },
   
 ]);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
 import { Modal, Button } from 'react-bootstrap';
 import 'leaflet/dist/leaflet.css';
 
@@ -59,13 +59,17 @@ const AlertMap = ({ referenceCoords }) => {
         console.error("Error al obtener la dirección: ", error);
       });
   };
+  const fillBlueOptions = { fillColor: 'blue' }
 
   return (
     <>
       <MapContainer center={userPosition || [21.88814023813352, -102.2922891518753]} zoom={13}>
         <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
         {userPosition && <Marker position={userPosition} />}
+        {console.log(userPosition)}
+        <Circle center={userPosition|| [21.88814023813352, -102.2922891518753]} pathOptions={fillBlueOptions} radius={200} />
       </MapContainer>
+      
 
       <Modal show={showModal} onHide={handleClose}>
         <Modal.Header closeButton>
@@ -85,7 +89,7 @@ const AlertMap = ({ referenceCoords }) => {
   );
 };
 
-const MapView = () => {
+const AdminView = () => {
   const referenceCoords = [
     [21.8915, -102.2505],
     [21.9592, -102.2664],
@@ -104,7 +108,7 @@ const MapView = () => {
   );
 };
 
-export default MapView;
+export default AdminView;
 
 
 /* import React from "react";
